@@ -1,0 +1,12 @@
+package tm
+
+brief = "Turing machine implementation"
+version = 0.0.1
+license = WTFPL
+author = https://github.com/SekiT
+sourceloc = https://github.com/SekiT/turing-machine-idris
+
+modules = Main
+main = Main
+pkgs = contrib
+executable = tm
