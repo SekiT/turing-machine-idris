@@ -32,6 +32,18 @@ record Machine where
   center : Bit
   right  : List Bit
 
+takeHeadOfTape : List Bit -> (Bit, List Bit)
+takeHeadOfTape []        = (O, [])
+takeHeadOfTape (b :: bs) = (b, bs)
+
+step : Program -> Machine -> Maybe Machine
+step _                    (MkMachine A _ _ _)                        = Nothing
+step (MkProgram commands) (MkMachine (Cont state) left center right) = do
+  MkCommand st1 b1 b2 dir st2 <- lookup (state, center) commands
+  case dir of
+    R => Just $ uncurry (MkMachine st2 (b2 :: left)) (takeHeadOfTape right)
+    L => Just $ (uncurry . flip) (MkMachine st2) (takeHeadOfTape left) (b2 :: right)
+
 Show Bit where
   show O = "0"
   show I = "1"
