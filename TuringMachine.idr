@@ -1,6 +1,7 @@
 module TuringMachine
 
 import Data.SortedMap
+import Data.Fuel
 
 %default total
 
@@ -43,6 +44,12 @@ step (MkProgram commands) (MkMachine (Cont state) left center right) = do
   case dir of
     R => Just $ uncurry (MkMachine st2 (b2 :: left)) (takeHeadOfTape right)
     L => Just $ (uncurry . flip) (MkMachine st2) (takeHeadOfTape left) (b2 :: right)
+
+run : Fuel -> Program -> Machine -> Machine
+run Dry _ machine = machine
+run (More fuel) program machine = case step program machine of
+  Nothing         => machine
+  Just newMachine => run fuel program newMachine
 
 Show Bit where
   show O = "0"
