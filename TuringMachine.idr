@@ -50,3 +50,17 @@ Show Command where
 
 Show Program where
   show (MkProgram commands) = concatMap show (values commands)
+
+showBitList : List Bit -> String
+showBitList []        = ""
+showBitList (b :: bs) = show b ++ showBitList bs
+
+Show Machine where
+  show (MkMachine state left center right) =
+    let
+      leftStr = showBitList (reverse left)
+      indent  = concat $ replicate (3 + length leftStr) " "
+    in
+      "..." ++ leftStr ++ show center ++ showBitList right ++ "...\n"
+      ++ indent ++ "↑\n"
+      ++ indent ++ show state
