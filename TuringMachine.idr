@@ -4,6 +4,7 @@ import Data.SortedMap
 import Data.Fuel
 
 %default total
+%access public export
 
 data Bit = O | I
 data Direction = R | L
@@ -33,10 +34,12 @@ record Machine where
   center : Bit
   right  : List Bit
 
+private
 takeHeadOfTape : List Bit -> (Bit, List Bit)
 takeHeadOfTape []        = (O, [])
 takeHeadOfTape (b :: bs) = (b, bs)
 
+private
 step : Program -> Machine -> Maybe Machine
 step _                    (MkMachine A _ _ _)                        = Nothing
 step (MkProgram commands) (MkMachine (Cont state) left center right) = do
@@ -45,6 +48,7 @@ step (MkProgram commands) (MkMachine (Cont state) left center right) = do
     R => Just $ uncurry (MkMachine st2 (b2 :: left)) (takeHeadOfTape right)
     L => Just $ (uncurry . flip) (MkMachine st2) (takeHeadOfTape left) (b2 :: right)
 
+export
 run : Fuel -> Program -> Machine -> Machine
 run Dry _ machine = machine
 run (More fuel) program machine = case step program machine of
@@ -70,6 +74,7 @@ Show Command where
 Show Program where
   show (MkProgram commands) = concatMap show (values commands)
 
+private
 showBitList : List Bit -> String
 showBitList []        = ""
 showBitList (b :: bs) = show b ++ showBitList bs
