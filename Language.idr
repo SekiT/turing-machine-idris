@@ -1,7 +1,9 @@
 module TuringMachine.Language
 
+import Data.SortedMap
 import Text.Token
 import Text.Lexer
+import Text.Parser
 import TuringMachine
 
 %default total
@@ -15,6 +17,17 @@ data TMTokenKind
   | TMComma
   | TMComment
   | TMIgnore
+
+Eq TMTokenKind where
+  TMBit       == TMBit       = True
+  TMDirection == TMDirection = True
+  TMState     == TMState     = True
+  TMBra       == TMBra       = True
+  TMKet       == TMKet       = True
+  TMComma     == TMComma     = True
+  TMComment   == TMComment   = True
+  TMIgnore    == TMIgnore    = True
+  _           == _           = False
 
 TokenKind TMTokenKind where
   TokType TMBit       = Bit
@@ -31,6 +44,7 @@ TokenKind TMTokenKind where
   tokValue TMComment   _ = ()
   tokValue TMIgnore    _ = ()
 
+export
 TMToken : Type
 TMToken = Token TMTokenKind
 
@@ -48,3 +62,40 @@ lexTM : String -> Maybe (List TMToken)
 lexTM str = case lex tmTokenMap str of
   (tokens, _, _, "") => Just $ map tok tokens
   _                  => Nothing
+
+command : Grammar TMToken True Command
+command = do
+  match TMBra
+  st1 <- match TMState
+  the (Grammar _ True _) $ case st1 of
+    A         => fail "before state should not be A"
+    Cont st1n => do
+      match TMComma
+      b1 <- match TMBit
+      match TMComma
+      b2 <- match TMBit
+      match TMComma
+      dir <- match TMDirection
+      match TMComma
+      st2 <- match TMState
+      pure $ MkCommand st1n b1 b2 dir st2
+
+commandListToProgram : List Command -> Program
+commandListToProgram commands =
+  MkProgram $ fromList $ map commandToPair commands where
+    commandToPair : Command -> ((Nat, Bit), Command)
+    commandToPair cmd@(MkCommand st1 b1 _ _ _) = ((st1, b1), cmd)
+
+tm : Grammar TMToken False Program
+tm = map (commandListToProgram) $ many command
+
+export
+ignored : TMToken -> Bool
+ignored (Tok TMIgnore _) = True
+ignored _                = False
+
+export
+parseTM : List TMToken -> Maybe Program
+parseTM toks = case parse tm $ filter (not . ignored) toks of
+  Right (program, []) => Just program
+  _                   => Nothing
