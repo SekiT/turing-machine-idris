@@ -6,9 +6,9 @@ import Data.Fuel
 %default total
 %access public export
 
-data Bit = O | I
+data Bit       = O | I
 data Direction = R | L
-data State = Cont Nat | A
+data State     = A | Cont Nat
 
 Eq Bit where
   O == O = True
@@ -49,7 +49,7 @@ step (MkProgram commands) (MkMachine (Cont state) left center right) = do
 
 export
 run : Fuel -> Program -> Machine -> Machine
-run Dry _ machine = machine
+run Dry         _       machine = machine
 run (More fuel) program machine = case step program machine of
   Nothing         => machine
   Just newMachine => run fuel program newMachine

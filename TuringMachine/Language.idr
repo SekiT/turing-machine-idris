@@ -52,14 +52,14 @@ TMToken : Type
 TMToken = Token TMTokenKind
 
 Show TMToken where
-  show (Tok TMBra _) = "<"
-  show (Tok TMKet _) = ">"
-  show (Tok TMComma _) = ","
-  show (Tok TMNat n) = "Nat[" ++ n ++ "]"
+  show (Tok TMBra       _) = "<"
+  show (Tok TMKet       _) = ">"
+  show (Tok TMComma     _) = ","
+  show (Tok TMNat       n) = "Nat[" ++ n ++ "]"
   show (Tok TMDirection d) = "D[" ++ d ++ "]"
-  show (Tok TMA _) = "A"
-  show (Tok TMComment _) = "[comment]"
-  show (Tok TMIgnore _) = ""
+  show (Tok TMA         _) = "A"
+  show (Tok TMComment   _) = "[comment]"
+  show (Tok TMIgnore    _) = ""
 
 tmTokenMap : TokenMap TMToken
 tmTokenMap = toTokenMap $
