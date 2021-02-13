@@ -91,8 +91,9 @@ tm : Grammar TMToken True Program
 tm = map (commandListToProgram) $ some command
 
 ignored : TMToken -> Bool
-ignored (Tok TMIgnore _) = True
-ignored _                = False
+ignored (Tok TMIgnore  _) = True
+ignored (Tok TMComment _) = True
+ignored _                 = False
 
 parseTM : List TMToken -> Maybe Program
 parseTM toks = case parse tm $ filter (not . ignored) toks of
