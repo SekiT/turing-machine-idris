@@ -105,7 +105,7 @@ commandListToProgram commands =
     commandToPair cmd@(MkCommand st1 b1 _ _ _) = ((st1, b1), cmd)
 
 tm : Grammar TMToken True Program
-tm = map (commandListToProgram) $ some command
+tm = map commandListToProgram (some command)
 
 ignored : TMToken -> Bool
 ignored (Tok TMIgnore  _) = True
