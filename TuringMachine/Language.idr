@@ -118,5 +118,5 @@ parseTM toks = case parse tm $ filter (not . ignored) toks of
   _                   => Nothing
 
 export
-parseProgram : String -> Maybe Program
-parseProgram str = lexTM str >>= parseTM
+compile : String -> Maybe Program
+compile str = lexTM str >>= parseTM

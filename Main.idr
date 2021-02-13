@@ -42,6 +42,6 @@ main = do
     | Nothing => putStrLn "Usage: tm [program_file_path] [tape] [max steps]"
   Right programStr <- readFile filepath
     | Left error => printLn error
-  Just program <- pure $ parseProgram programStr
+  Just program <- pure $ compile programStr
     | Nothing => putStrLn "Invalid program"
   printLn $ run (stepsToFuel steps) program $ (MkMachine (Cont 0) []) `uncurry` (takeHeadOfTape tape)
