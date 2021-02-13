@@ -34,7 +34,6 @@ record Machine where
   center : Bit
   right  : List Bit
 
-private
 takeHeadOfTape : List Bit -> (Bit, List Bit)
 takeHeadOfTape []        = (O, [])
 takeHeadOfTape (b :: bs) = (b, bs)
