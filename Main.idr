@@ -38,7 +38,6 @@ stepsToFuel (Just n) = limit n
 partial
 main : IO ()
 main = do
-  getArgs >>= printLn
   Just (filepath, tape, steps) <- parseArgs <$> getArgs
     | Nothing => putStrLn "Usage: tm [program_file_path] [tape] [max steps]"
   Right programStr <- readFile filepath
