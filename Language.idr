@@ -44,7 +44,6 @@ TokenKind TMTokenKind where
   tokValue TMComment   _ = ()
   tokValue TMIgnore    _ = ()
 
-export
 TMToken : Type
 TMToken = Token TMTokenKind
 
@@ -89,13 +88,15 @@ commandListToProgram commands =
 tm : Grammar TMToken False Program
 tm = map (commandListToProgram) $ many command
 
-export
 ignored : TMToken -> Bool
 ignored (Tok TMIgnore _) = True
 ignored _                = False
 
-export
 parseTM : List TMToken -> Maybe Program
 parseTM toks = case parse tm $ filter (not . ignored) toks of
   Right (program, []) => Just program
   _                   => Nothing
+
+export
+parseProgram : String -> Maybe Program
+parseProgram str = lexTM str >>= parseTM
