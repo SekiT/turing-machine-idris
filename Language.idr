@@ -53,6 +53,7 @@ tmTokenMap = toTokenMap $
   , (is ',', TMComma)
   , (is '<', TMBra)
   , (is '>', TMKet)
+  , (oneOf "RL", TMDirection)
   , (exact "A" <|> digits, TMState)
   , (lineComment (is '#'), TMComment)
   ]
