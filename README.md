@@ -8,18 +8,18 @@ My exercise in Idris, implementing turing machine.
 
 ## Execution
 
-`$ ./tm program.tm --tape=0001 --max-steps=1000`
+`$ ./tm program.tm 0001 300`
 
-First argument is the file path of the executed program.
+The first argument is the file path of the executed program.
 
-`--tape` is the initial tape (from 0th position to right). This is optional.
+The second argument is the initial tape (from 0th position to right). Undefined positions are filled with 0.
 
-`--max-steps` is the maximum number of steps executed. This is optional and the default is infinity (which may hang).
+The third argument is the maximum number of steps executed. This is optional and the default is infinity (which may hang).
 
 ## Example
 
 ```
-$ ./tm example/irrational.tm --max-steps=127
+$ ./tm example/irrational.tm 0 127
 ...1010010001000010001011...
                         ↑
                         8
