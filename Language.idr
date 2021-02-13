@@ -87,8 +87,8 @@ commandListToProgram commands =
     commandToPair : Command -> ((Nat, Bit), Command)
     commandToPair cmd@(MkCommand st1 b1 _ _ _) = ((st1, b1), cmd)
 
-tm : Grammar TMToken False Program
-tm = map (commandListToProgram) $ many command
+tm : Grammar TMToken True Program
+tm = map (commandListToProgram) $ some command
 
 ignored : TMToken -> Bool
 ignored (Tok TMIgnore _) = True
