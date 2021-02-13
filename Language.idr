@@ -78,6 +78,7 @@ command = do
       dir <- match TMDirection
       match TMComma
       st2 <- match TMState
+      match TMKet
       pure $ MkCommand st1n b1 b2 dir st2
 
 commandListToProgram : List Command -> Program
